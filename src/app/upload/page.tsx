@@ -9,12 +9,16 @@ enum UploadStatus {
 
 export default function Upload() {
     const [file, setFile] = useState<File>()
+    const [title, setTitle] = useState<string>("")
     const [uploadStatus, setUploadStatus] = useState<UploadStatus>(UploadStatus.UPLOADING)
     const changeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files) {
             return;
         }
         setFile(e.target.files[0])
+    }
+    const changeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setTitle(e.target.value)
     }
     const uploadFile = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -23,6 +27,7 @@ export default function Upload() {
         }
         const formData = new FormData();
         formData.append("file", file!);
+        formData.append("title", title);
         fetch("/api/upload", {
             method: "POST",
             body: formData
@@ -39,6 +44,7 @@ export default function Upload() {
     return (
         <main className="flex min-h-screen flex-col items-center justify-between p-24">
             <form onSubmit={uploadFile}>
+                <input type="text" name="title" placeholder="タイトル" onChange={changeTitle} />
                 <input type="file" name="file" onChange={changeFile}  />
                 <button type="submit">Upload</button>
             </form>

@@ -1,9 +1,10 @@
 import { IContainer, Item } from "@/features/container";
 import { BlobServiceClient, ContainerClient } from "@azure/storage-blob";
 
-class AzureBlobContainer implements IContainer {
+export default class AzureBlobContainer implements IContainer {
+    private static instance: AzureBlobContainer;
     private container: ContainerClient
-    constructor()  { 
+    constructor()  {
         if (!process.env.AZURE_STORAGE_CONNECTION_STRING) {
             throw new Error("AZURE_STORAGE_CONNECTION_STRING is not set");
         }
@@ -30,18 +31,12 @@ class AzureBlobContainer implements IContainer {
         const blockBlobClient = this.container.getBlockBlobClient(fileName);
         await blockBlobClient.upload(buffer, buffer.length);
     }
-}
 
-let container: AzureBlobContainer | undefined;
-
-export function getContainerInstance(): AzureBlobContainer {
-    if(!container) {
-        try {
-            container = new AzureBlobContainer();
-        } catch (e) {
-            console.log(e);
-            throw e;
+    static getInstance(): AzureBlobContainer {
+        if (!AzureBlobContainer.instance) {
+            console.log("create instance");
+            AzureBlobContainer.instance = new AzureBlobContainer();
         }
+        return AzureBlobContainer.instance;
     }
-    return container;
 }

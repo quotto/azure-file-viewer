@@ -23,7 +23,6 @@ export default function Home() {
         return;
       }
       const data = await response.json();
-      console.log(JSON.stringify(data));
       setList(data)
       setFetchStatus(FetchStatus.SUCCESS)
     })
@@ -32,7 +31,7 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
         {fetchStatus === FetchStatus.SUCCESS && list.length > 0 && list.map((item, index) => (
-          <div>
+          <div key={index}>
             <Link href={`/item/${item.id}`} key={index}>{item.title}</Link>
           </div>
         ))}
