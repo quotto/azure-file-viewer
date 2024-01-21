@@ -1,3 +1,4 @@
+'use server'
 import { IContainer } from "../container";
 import { IDatabase } from "../database";
 
