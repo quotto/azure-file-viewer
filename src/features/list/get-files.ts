@@ -8,6 +8,7 @@ export type Item = {
     updatedAt: string
 }
 export async function getList(database: IDatabase) {
+    console.log("getList")
     const itemsList = await database.getItems();
     return itemsList.map((item) => {
         return {

@@ -2,6 +2,13 @@ import { DBItem, IDatabase } from "@/features/database";
 import { CosmosClient,Container } from "@azure/cosmos";
 import { DefaultAzureCredential } from "@azure/identity";
 
+type Item = {
+    id: string,
+    title: string,
+    blobItemName: string,
+    _ts: number
+}
+
 export default class CosmosDB implements IDatabase {
     private static instance: CosmosDB;
     private dbclient: CosmosClient;
@@ -20,7 +27,6 @@ export default class CosmosDB implements IDatabase {
         this.itemsContainer = this.dbclient.database("items").container("items");
     }
     async saveItem(id: string, blobItemName: string, title: string): Promise<void> {
-        console.log("saveItem")
         await this.itemsContainer.items.upsert({
             id: id,
             title: title,
@@ -42,13 +48,16 @@ export default class CosmosDB implements IDatabase {
     }
 
     async getItemById(id: string): Promise<DBItem> {
-        const response = await this.itemsContainer.item(id).read();
-        const item = response.resource;
+        const itemResponse = await this.itemsContainer.item(id,id).read<Item>();
+        if(itemResponse.statusCode === 404) {
+            throw new Error(`Not Found Error: ${id}`);
+        }
+        const readDoc = itemResponse.resource;
         return {
-            id: item.id,
-            title: item.title,
-            blobItemName: item.blobItemName,
-            timestamp: item.updatedAt
+            id: readDoc!.id,
+            title: readDoc!.title,
+            blobItemName: readDoc!.blobItemName,
+            timestamp: readDoc!._ts
         }
     }
 

@@ -44,7 +44,7 @@ export default function Upload() {
     return (
         <main className="flex min-h-screen flex-col items-center justify-between p-24">
             <form onSubmit={uploadFile}>
-                <input type="text" name="title" placeholder="タイトル" onChange={changeTitle} />
+                <input type="text" name="title" placeholder="タイトル" onChange={changeTitle} value={title} />
                 <input type="file" name="file" onChange={changeFile}  />
                 <button type="submit">Upload</button>
             </form>
