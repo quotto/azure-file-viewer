@@ -36,7 +36,7 @@ export default class CosmosDB implements IDatabase {
                 id: item.id,
                 title: item.title,
                 blobItemName: item.blobItemName,
-                updatedAt: item.updatedAt
+                timestamp: item._ts
             }
         });
     }
@@ -48,7 +48,7 @@ export default class CosmosDB implements IDatabase {
             id: item.id,
             title: item.title,
             blobItemName: item.blobItemName,
-            updatedAt: item.updatedAt
+            timestamp: item.updatedAt
         }
     }
 

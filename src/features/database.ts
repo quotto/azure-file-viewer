@@ -2,7 +2,7 @@ export type DBItem = {
     id: string,
     title: string,
     blobItemName: string,
-    updatedAt: string
+    timestamp: number
 }
 export interface IDatabase {
     saveItem(id: string, blobItemName: string, title: string): Promise<void>,
